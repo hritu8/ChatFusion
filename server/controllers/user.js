@@ -1,7 +1,12 @@
 import { compare } from "bcrypt";
 import { User } from "../models/user.js";
 import { Request } from "../models/request.js";
-import { cookieOption, emitEvent, sendToken } from "../utils/features.js";
+import {
+  cookieOption,
+  emitEvent,
+  sendToken,
+  uploadFilesToCloudinary,
+} from "../utils/features.js";
 import { TryCatch } from "../middlewares/error.js";
 import { ErrorHandler } from "../utils/utility.js";
 import { Chat } from "../models/chat.js";
@@ -18,10 +23,13 @@ const newUser = TryCatch(async (req, res, next) => {
     return next(new ErrorHandler("Please upload an avatar", 400));
   }
 
+  const result = await uploadFilesToCloudinary([file]);
+
   const avatar = {
-    public_id: "sample_id",
-    url: "https://res.cloudinary.com/sample/image/upload/v1641234567890/sample_id.jpg",
+    public_id: result[0].public_id,
+    url: result[0].url,
   };
+
   const user = await User.create({
     name,
     username,
@@ -57,6 +65,7 @@ const getMyProfile = TryCatch(async (req, res, next) => {
 });
 
 const logout = TryCatch(async (req, res) => {
+  console.log("res", res.status);
   return res
     .status(200)
     .cookie("chattu-token", "", { ...cookieOption, maxAge: 0 })

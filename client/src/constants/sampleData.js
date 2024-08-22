@@ -50,7 +50,7 @@ export const SampleMessages = [
     attachments: [
       {
         public_id: "sdbx",
-        url: "http://www.example.png",
+        url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpngtree.com%2Fso%2Furl&psig=AOvVaw2-hStEwIWK_PBgUQyjPV_B&ust=1724413115951000&source=images&cd=vfe&opi=89978449&ved=https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
       },
     ],
     content: "",
@@ -134,7 +134,8 @@ export const dashboardData = {
       content: "Hello, everyone!",
       _id: "dfbc35fdbsgdz",
       sender: {
-        avatar: "http://www.example.png",
+        avatar:
+          "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpngtree.com%2Fso%2Furl&psig=AOvVaw2-hStEwIWK_PBgUQyjPV_B&ust=1724413115951000&source=images&cd=vfe&opi=89978449&ved=https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
         name: "Alice",
       },
       chat: "chatId",
@@ -145,13 +146,14 @@ export const dashboardData = {
       attachments: [
         {
           public_id: "jzxdbx",
-          url: "http://www.example.png",
+          url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpngtree.com%2Fso%2Furl&psig=AOvVaw2-hStEwIWK_PBgUQyjPV_B&ust=1724413115951000&source=images&cd=vfe&opi=89978449&ved=https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
         },
       ],
       content: "Hi, Bob! How are you?",
       _id: "tyj35fdbsgdz",
       sender: {
-        avatar: "http://www.example.png",
+        avatar:
+          "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpngtree.com%2Fso%2Furl&psig=AOvVaw2-hStEwIWK_PBgUQyjPV_B&ust=1724413115951000&source=images&cd=vfe&opi=89978449&ved=https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
         name: "bob 5",
       },
       chat: "chatId",

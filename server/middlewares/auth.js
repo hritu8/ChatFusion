@@ -13,7 +13,7 @@ const isAuthenticated = TryCatch((req, res, next) => {
   const decodedData = jwt.verify(token, process.env.JWT_SECRET);
 
   req.user = decodedData._id;
-
+  console.log("isauth", req.user);
   next();
 });
 

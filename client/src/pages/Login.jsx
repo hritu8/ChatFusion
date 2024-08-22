@@ -17,6 +17,8 @@ import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
 import { bgGradient } from "../constants/color";
 import { userExits } from "../redux/reducers/auth";
 import { usernameValidator } from "../utils/validators";
+import axios from "axios";
+import { server } from "../constants/config";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -72,6 +74,7 @@ const Login = () => {
       dispatch(userExits(true));
       toast.success(data.message);
     } catch (error) {
+      console.log("sign up failed", error);
       toast.error(error?.response?.data?.message) || "Something went wrong";
     }
   };

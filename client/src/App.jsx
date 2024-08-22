@@ -6,7 +6,7 @@ import { LayoutLoader } from "./components/layout/Loaders";
 import { server } from "./constants/config";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { userNotExits } from "./redux/reducers/auth";
+import { userExits, userNotExits } from "./redux/reducers/auth";
 import { Toaster } from "react-hot-toast";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -27,8 +27,11 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get(`${server}/api/v1/user/me`)
-      .then((res) => console.log(res))
+      .get(`${server}/api/v1/user/me`, { withCredentials: true })
+      .then(({ data }) => {
+        console.log(data);
+        dispatch(userExits(data.user));
+      })
       .catch((err) => dispatch(userNotExits()));
   }, [dispatch]);
   return loader ? (

@@ -7,6 +7,8 @@ import { Server } from "socket.io";
 import { createServer } from "http";
 import { v4 as uuid } from "uuid";
 import cors from "cors";
+import { v2 as cloudinary } from "cloudinary";
+
 dotenv.config({
   path: "./.env",
 });
@@ -26,6 +28,11 @@ const envMode = process.env.NODE_ENV.trim() || "PRODUCTION";
 const adminSecretKey = process.env.JWT_SECRET;
 const userSocketIDs = new Map();
 connectDB(mongo_URI);
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const app = express();
 const server = createServer(app);
