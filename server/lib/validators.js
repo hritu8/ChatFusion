@@ -82,7 +82,6 @@ const renameValidator = () => [
 
 const sendRequestValidator = () => [
   // Corrected validation rules for registration form
-
   body("userId", "Please Enter User Id ").notEmpty(),
 ];
 

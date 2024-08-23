@@ -27,6 +27,7 @@ const adminLogin = TryCatch(async (req, res, next) => {
 });
 
 const adminLogout = TryCatch(async (req, res, next) => {
+  console.log("admin logout");
   return res
     .status(200)
     .cookie("chattu-admin-token", token, {

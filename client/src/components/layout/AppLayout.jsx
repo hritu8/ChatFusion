@@ -3,21 +3,48 @@ import Title from "../shared/Title";
 import react from "react";
 import ChatList from "../specific/ChatList";
 import { SampleChats } from "../../constants/sampleData";
-import { Grid } from "@mui/material";
+import { Drawer, Grid, Skeleton } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Profile from "../specific/Profile";
+import { useMyChatsQuery } from "../../redux/api/api";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsMobile } from "../../redux/reducers/misc";
+import { useErrors } from "../../hooks/hook";
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const params = useParams();
+    const dispatch = useDispatch();
     const chatId = params.chatId;
+    const { isMobile } = useSelector((state) => state.misc);
+    const { isLoading, data, isError, error, refetch } = useMyChatsQuery("");
+
+    useErrors([{ isError, error }]);
+
     const handleDeleteChat = (e, _id, groupChat) => {
       e.preventDefault();
       console.log("Delete Chat", _id, groupChat);
+    };
+    const handleMobileClose = () => {
+      dispatch(setIsMobile(false));
     };
     return (
       <>
         <Title />
         <Header />
+
+        {isLoading ? (
+          <Skeleton />
+        ) : (
+          <Drawer open={isMobile} onClose={handleMobileClose}>
+            <ChatList
+              w="70vw"
+              chats={data.chats}
+              chatId={chatId}
+              handleDeleteChat={handleDeleteChat}
+            />
+          </Drawer>
+        )}
+
         <Grid container height={"calc(100vh - 4rem)"}>
           <Grid
             item
@@ -26,11 +53,15 @@ const AppLayout = () => (WrappedComponent) => {
             sx={{ display: { xs: "none", sm: "block" } }}
             height={"100%"}
           >
-            <ChatList
-              chats={SampleChats}
-              chatId={chatId}
-              handleDeleteChat={handleDeleteChat}
-            />
+            {isLoading ? (
+              <Skeleton />
+            ) : (
+              <ChatList
+                chats={data.chats}
+                chatId={chatId}
+                handleDeleteChat={handleDeleteChat}
+              />
+            )}
           </Grid>
           <Grid item xs={12} sm={8} md={5} lg={6} height={"100%"}>
             <WrappedComponent {...props} />

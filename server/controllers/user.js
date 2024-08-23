@@ -65,7 +65,6 @@ const getMyProfile = TryCatch(async (req, res, next) => {
 });
 
 const logout = TryCatch(async (req, res) => {
-  console.log("res", res.status);
   return res
     .status(200)
     .cookie("chattu-token", "", { ...cookieOption, maxAge: 0 })
@@ -91,16 +90,14 @@ const searchUser = TryCatch(async (req, res) => {
   });
 
   // modifying the response
-  const users = allUsersExceptMeAndFriends.map((_id, name, avatar) => ({
+  const users = allUsersExceptMeAndFriends.map(({ _id, name, avatar }) => ({
     _id,
     name,
     avatar: avatar.url,
   }));
-
   return res.status(200).json({
     success: true,
     users,
-    allUsersFromMyChats,
   });
 });
 
@@ -113,7 +110,10 @@ const sendFriendRequest = TryCatch(async (req, res, next) => {
     ],
   });
 
-  if (request) return next(new ErrorHandler("Request already send", 400));
+  if (request) {
+    console.log(new ErrorHandler("Request already send", 400));
+    return next(new ErrorHandler("Request already send", 400));
+  }
 
   await Request.create({
     sender: req.user,
@@ -124,7 +124,7 @@ const sendFriendRequest = TryCatch(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
-    message: "Logged out successfully",
+    message: "Friend Request Sent",
   });
 });
 
