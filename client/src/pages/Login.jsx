@@ -28,6 +28,7 @@ const Login = () => {
   const username = useInputValidation("", usernameValidator);
   const password = useStrongPassword();
   const avatar = useFileHandler("single");
+  console.log("login", avatar);
 
   const dispatch = useDispatch();
 
@@ -166,9 +167,9 @@ const Login = () => {
                       height: "10rem",
                       objectFit: "contain",
                     }}
-                    src={avatar.preview}
+                    src={avatar?.preview}
                   />
-                  {avatar.error && (
+                  {avatar?.error && (
                     <Typography
                       m={"1rem auto"}
                       width={"fit-content"}
@@ -176,7 +177,7 @@ const Login = () => {
                       color="error"
                       variant="caption"
                     >
-                      {avatar.error}
+                      {avatar?.error}
                     </Typography>
                   )}
                   <IconButton
@@ -196,7 +197,7 @@ const Login = () => {
                       <CameraAltIcon />
                       <VisuallyHiddenInput
                         type="file"
-                        onChange={avatar.changeHandler}
+                        onChange={avatar?.changeHandler}
                       />
                     </>
                   </IconButton>

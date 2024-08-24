@@ -54,11 +54,11 @@ const allUsers = TryCatch(async (req, res) => {
           members: _id,
         }),
       ]);
-
+      console.log("admin", avatar.url);
       return {
         name,
         username,
-        avatar: avatar.Url,
+        avatar: avatar.url,
         _id,
         groups,
         friends,

@@ -16,8 +16,9 @@ const AppLayout = () => (WrappedComponent) => {
     const dispatch = useDispatch();
     const chatId = params.chatId;
     const { isMobile } = useSelector((state) => state.misc);
+    const { user } = useSelector((state) => state.auth);
     const { isLoading, data, isError, error, refetch } = useMyChatsQuery("");
-
+    console.log(data);
     useErrors([{ isError, error }]);
 
     const handleDeleteChat = (e, _id, groupChat) => {
@@ -38,7 +39,7 @@ const AppLayout = () => (WrappedComponent) => {
           <Drawer open={isMobile} onClose={handleMobileClose}>
             <ChatList
               w="70vw"
-              chats={data.chats}
+              chats={data?.chats}
               chatId={chatId}
               handleDeleteChat={handleDeleteChat}
             />
@@ -57,7 +58,7 @@ const AppLayout = () => (WrappedComponent) => {
               <Skeleton />
             ) : (
               <ChatList
-                chats={data.chats}
+                chats={data?.chats}
                 chatId={chatId}
                 handleDeleteChat={handleDeleteChat}
               />
@@ -77,7 +78,7 @@ const AppLayout = () => (WrappedComponent) => {
               bgcolor: "rgba(0,0,0,0.85)",
             }}
           >
-            <Profile />
+            <Profile user={user} />
           </Grid>
         </Grid>
       </>

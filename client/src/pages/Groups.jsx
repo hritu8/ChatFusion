@@ -299,6 +299,7 @@ const GroupsList = ({ w = "100%", myGroups = [], chatId }) => {
 
 const GroupListItem = memo(({ group, chatId }) => {
   const { name, avatar, _id } = group;
+  console.log("GroupList", avatar);
   return (
     <Link
       to={`?group=${_id}`}

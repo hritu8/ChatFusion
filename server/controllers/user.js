@@ -130,15 +130,17 @@ const sendFriendRequest = TryCatch(async (req, res, next) => {
 
 const acceptFriendRequest = TryCatch(async (req, res, next) => {
   const { requestId, accept } = req.body;
+  console.log("request se phele");
   const request = await Request.findById(requestId)
     .populate("sender", "name")
     .populate("receiver", "name");
+  
   if (!request) return next(new ErrorHandler("Request not found", 404));
   if (request.receiver._id.toString() !== req.user.toString())
     return next(
       new ErrorHandler("You are not authorized to accept this request", 401)
     );
-
+    console.log("request ke baad", request);
   if (!accept) {
     await request.deleteOne();
     return res.status(200).json({
@@ -146,7 +148,7 @@ const acceptFriendRequest = TryCatch(async (req, res, next) => {
       message: "Request deleted successfully",
     });
   }
-  const members = [request.sender._id, request.receiver.name];
+  const members = [request.sender._id, request.receiver._id];
 
   await Promise.all([
     Chat.create({

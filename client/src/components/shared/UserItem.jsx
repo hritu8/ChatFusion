@@ -11,7 +11,7 @@ const UserItem = ({
   styling = {},
 }) => {
   const { name, _id, avatar } = user;
-
+  console.log("userItem", avatar);
   return (
     <ListItem>
       <Stack

@@ -9,7 +9,7 @@ const schema = new Schema(
     },
 
     sender: { type: Types.ObjectId, ref: "User", required: true },
-    receiver: { type: Types.ObjectId, ref: "Chat", required: true },
+    receiver: { type: Types.ObjectId, ref: "User", required: true },
   },
   {
     timestamps: true,
