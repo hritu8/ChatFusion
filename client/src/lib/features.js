@@ -14,7 +14,11 @@ const fileFormat = (url = "") => {
     return "image";
   return "file";
 };
-const transformImage = (url = "", width = 100) => url;
+const transformImage = (url = "", width = 100) => {
+  // url ke saath width bhi adjust kar skte hai
+  const newUrl = url.replace("upload/", `upload/dpr_auto/w_${width}/`);
+  return newUrl;
+};
 const getLast7Days = () => {
   const currentDate = moment();
   const last7Days = [];

@@ -1,7 +1,11 @@
 import { TryCatch } from "../middlewares/error.js";
 import { ErrorHandler } from "../utils/utility.js";
 import { Chat } from "../models/chat.js";
-import { deleteFilesFromCloudinary, emitEvent } from "../utils/features.js";
+import {
+  deleteFilesFromCloudinary,
+  emitEvent,
+  uploadFilesToCloudinary,
+} from "../utils/features.js";
 import {
   ALERT,
   NEW_ATTACHMENT,
@@ -198,6 +202,7 @@ const leaveGroup = TryCatch(async (req, res, next) => {
 const sendAttachments = TryCatch(async (req, res, next) => {
   const { chatId } = req.body;
   const files = req.files || [];
+  console.log(files);
 
   if (files.length < 1) {
     return next(new ErrorHandler("Please Upload attachments", 400));
@@ -216,7 +221,7 @@ const sendAttachments = TryCatch(async (req, res, next) => {
     return next(new ErrorHandler("Please provide attachments", 400));
 
   // upload files here
-  const attachments = [];
+  const attachments = await uploadFilesToCloudinary(files);
 
   const messageForDB = {
     content: "",
