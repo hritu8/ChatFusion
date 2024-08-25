@@ -67,9 +67,10 @@ io.on("connection", (socket) => {
   userSocketIDs.set(user._id.toString(), socket.id);
   console.log("User connected", socket.id);
   console.log(userSocketIDs);
-  socket.on(NEW_MESSAGE, async ({ chatId, members, messages }) => {
+
+  socket.on(NEW_MESSAGE, async ({ chatId, members, message }) => {
     const messageForRealTime = {
-      content: messages,
+      content: message,
       _id: uuid(),
       sender: {
         _id: user._id,
@@ -79,17 +80,18 @@ io.on("connection", (socket) => {
       createdAt: new Date().toISOString(),
     };
     const messageForDB = {
-      content: messages,
+      content: message,
       sender: user._id,
       chat: chatId,
     };
+
     const memberSocket = getSockets(members);
     io.to(memberSocket).emit(NEW_MESSAGE, {
       chatId,
       message: messageForRealTime,
     });
     io.to(memberSocket).emit(NEW_MESSAGE_ALERT, { chatId });
-    console.log("New Message", messageForRealTime);
+
     try {
       await Message.create(messageForDB);
     } catch (error) {
