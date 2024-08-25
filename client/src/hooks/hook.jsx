@@ -22,7 +22,7 @@ const useAsyncMutation = (mutationHook) => {
     const toastId = toast.loading(toastMessage || "Updating data...");
     try {
       const res = await mutate(...args);
-      
+
       console.log("res hook", res);
       if (res.data) {
         console.log("res.data", res.data);
@@ -48,4 +48,18 @@ const useAsyncMutation = (mutationHook) => {
   return [executeMutation, isLoading, data];
 };
 
-export { useErrors, useAsyncMutation };
+const useSocketEvents = (socket, handlers) => {
+  useEffect(() => {
+    Object.entries(handlers).forEach(([event, handler]) => {
+      socket.on(event, handler);
+    });
+
+    return () => {
+      Object.entries(handlers).forEach(([event, handler]) => {
+        socket.off(event, handler);
+      });
+    };
+  }, [socket, handlers]);
+};
+
+export { useErrors, useAsyncMutation, useSocketEvents };
