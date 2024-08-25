@@ -10,7 +10,6 @@ import moment from "moment";
 import { transformImage } from "../../lib/features";
 
 const Profile = ({ user }) => {
-  console.log("Profile", user, user.avatar);
   return (
     <Stack spacing={"2rem"} direction={"column"} alignItems={"center"}>
       <Avatar

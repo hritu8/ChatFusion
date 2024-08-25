@@ -8,19 +8,21 @@ import { createServer } from "http";
 import { v4 as uuid } from "uuid";
 import cors from "cors";
 import { v2 as cloudinary } from "cloudinary";
+import { NEW_MESSAGE, NEW_MESSAGE_ALERT } from "./constants/events.js";
+import { getSockets } from "./lib/helper.js";
+import { Message } from "./models/message.js";
+import { corsOptions } from "./constants/config.js";
+import { sockedAuthenticator } from "./middlewares/auth.js";
+import userRoute from "./routes/user.js";
+import chatRoute from "./routes/chat.js";
+import adminRoute from "./routes/admin.js";
 
 dotenv.config({
   path: "./.env",
 });
 
-import userRoute from "./routes/user.js";
-import chatRoute from "./routes/chat.js";
-import adminRoute from "./routes/admin.js";
 import { createUser } from "./seeders/user.js";
 import { createMessagesInChat, createSingleChats } from "./seeders/chat.js";
-import { NEW_MESSAGE, NEW_MESSAGE_ALERT } from "./constants/events.js";
-import { getSockets } from "./lib/helper.js";
-import { Message } from "./models/message.js";
 
 const mongo_URI = process.env.MONGO_URI;
 const port = process.env.PORT || 3000;
@@ -36,22 +38,13 @@ cloudinary.config({
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server, {});
+const io = new Server(server, { cors: corsOptions });
 // using middleware here
 
 app.use(express.json()); // middleware to parse json data
 app.use(cookieParser()); // middleware to parse cookies
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:4173",
-      process.env.CLIENT_URL,
-    ],
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/chat", chatRoute);
@@ -61,23 +54,16 @@ app.get("/", (req, res) => {
 });
 
 io.use((socket, next) => {
-  const token = socket.handshake.query.token;
-  if (!token) {
-    return next(new Error("Authentication failed"));
-  }
-  const secretKey = jwt.verify(token, process.env.JWT_SECRET);
-  const isMatch = secretKey === adminSecretKey;
-  if (!isMatch) {
-    return next(new Error("Authentication failed"));
-  }
-  next();
+  cookieParser()(
+    socket.request,
+    socket.request.res,
+    async (err) => await sockedAuthenticator(err, socket, next)
+  );
 });
 
 io.on("connection", (socket) => {
-  const user = {
-    _id: "demo",
-    name: "harshit",
-  };
+  const user = socket.user;
+
   userSocketIDs.set(user._id.toString(), socket.id);
   console.log("User connected", socket.id);
   console.log(userSocketIDs);
