@@ -9,7 +9,7 @@ const ChatList = ({
   onlineUsers = [],
   newMessagesAlert = [
     {
-      chatId: chatId,
+      chatId: "",
       count: 0,
     },
   ],
@@ -19,7 +19,7 @@ const ChatList = ({
     <Stack width={w} direction={"column"} overflow={"auto"} height={"100%"}>
       {chats?.map((data, index) => {
         const { avatar, name, _id, groupChat, members } = data;
-        
+
         const newMessageAlert = newMessagesAlert.find(
           ({ chatId }) => chatId === _id
         );

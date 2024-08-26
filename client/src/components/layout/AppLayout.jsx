@@ -27,12 +27,12 @@ const AppLayout = () => (WrappedComponent) => {
     const { isMobile } = useSelector((state) => state.misc);
     const { user } = useSelector((state) => state.auth);
     const { newMessagesAlert } = useSelector((state) => state.chat);
-
     const { isLoading, data, isError, error } = useMyChatsQuery("");
 
     useErrors([{ isError, error }]);
 
     useEffect(() => {
+      console.log("Persisting to localStorage:", newMessagesAlert); // Debugging
       getOrSaveFromStorage({ key: NEW_MESSAGE_ALERT, value: newMessagesAlert });
     }, [newMessagesAlert]);
 
@@ -46,6 +46,8 @@ const AppLayout = () => (WrappedComponent) => {
     const newMessagesAlertHandler = useCallback(
       (data) => {
         console.log("New Message Alert", data);
+        // * problem
+        // console.log(data.chatId, " ", chatId);
         if (data.chatId === chatId) return;
 
         dispatch(setNewMessagesAlert(data));

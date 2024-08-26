@@ -29,27 +29,17 @@ const getLast7Days = () => {
   }
   return last7Days;
 };
+
 const getOrSaveFromStorage = ({ key, value, get }) => {
-  // if (get) {
-  //   const storedValue = localStorage.getItem(key);
-  //   console.log("storedValue", storedValue);
-  //   if (storedValue) {
-  //     try {
-  //       return JSON.parse(storedValue);
-  //     } catch (error) {
-  //       console.error(`Error parsing ${key} from localStorage:`, error);
-  //       return null;
-  //     }
-  //   }
-  //   return null;
-  // } else {
-  //   localStorage.setItem(key, JSON.stringify(value));
-  // }
-  if (get)
+  if (get) {
+    console.log(`Getting ${key} from localStorage:`, localStorage.getItem(key)); // Debugging
     return localStorage.getItem(key)
       ? JSON.parse(localStorage.getItem(key))
       : null;
-  else localStorage.setItem(key, JSON.stringify(value));
+  } else {
+    localStorage.setItem(key, JSON.stringify(value));
+    console.log(`Saved ${key} to localStorage`, value); // Debugging
+  }
 };
 
 export { fileFormat, transformImage, getLast7Days, getOrSaveFromStorage };
