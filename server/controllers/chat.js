@@ -165,7 +165,6 @@ const leaveGroup = TryCatch(async (req, res, next) => {
   const chatId = req.params.id;
 
   const chat = await Chat.findById(chatId);
-  console.log(chat);
 
   if (!chat) return next(new ErrorHandler("Chat not found", 404));
 
@@ -196,10 +195,10 @@ const leaveGroup = TryCatch(async (req, res, next) => {
     chat.members,
     `User ${user.name} has been left the group`
   );
-  emitEvent(req, REFETCH_CHATS, chat.members);
+  // emitEvent(req, REFETCH_CHATS, chat.members);
   return res.status(200).json({
     success: true,
-    message: "Member removed successfully",
+    message: "Leave Group successfully",
   });
 });
 

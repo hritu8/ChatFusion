@@ -31,14 +31,14 @@ const Chat = ({ chatId, user }) => {
   const bottomRef = useRef(null);
   const socket = getSocket();
   const dispatch = useDispatch();
-  console.log("chat Id chat", chatId);
+
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(1);
   const [fileMenuAnchor, setFileMenuAnchor] = useState(null);
   const [Iamtyping, setIamtyping] = useState(false);
   const [userTyping, setUserTyping] = useState(false);
-  console.log("usertyping", userTyping);
+
   const typingTimeout = useRef(null);
 
   const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId });
