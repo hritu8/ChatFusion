@@ -16,13 +16,13 @@ const useAsyncMutation = (mutationHook) => {
   const [mutate] = mutationHook();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
-
+  
   const executeMutation = async (toastMessage, ...args) => {
     setIsLoading(true);
     const toastId = toast.loading(toastMessage || "Updating data...");
     try {
       const res = await mutate(...args);
-
+      
       console.log("res hook", res);
       if (res.data) {
         console.log("res.data", res.data);

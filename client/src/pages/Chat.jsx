@@ -23,9 +23,11 @@ import { useDispatch } from "react-redux";
 import { setIsFileMenu } from "../redux/reducers/misc";
 import { removeNewMessagesAlert } from "../redux/reducers/chat";
 import { TypingLoader } from "../components/layout/Loaders";
+import { useNavigate } from "react-router-dom";
 
 const Chat = ({ chatId, user }) => {
   const containerRef = useRef(null);
+  const navigate = useNavigate();
   const bottomRef = useRef(null);
   const socket = getSocket();
   const dispatch = useDispatch();
@@ -96,6 +98,12 @@ const Chat = ({ chatId, user }) => {
     if (bottomRef.current)
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    if (!chatDetails?.data?.chat) {
+      return navigate("/");
+    }
+  }, [chatDetails.data]);
 
   const newMessageListener = useCallback(
     (data) => {
