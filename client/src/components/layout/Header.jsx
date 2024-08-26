@@ -3,6 +3,7 @@ import { orange } from "../../constants/color";
 import {
   AppBar,
   Backdrop,
+  Badge,
   Box,
   IconButton,
   Toolbar,
@@ -28,14 +29,21 @@ import {
   setIsNotification,
   setIsSearch,
 } from "../../redux/reducers/misc";
+import { resetNotification } from "../../redux/reducers/chat";
 const SearchDialog = lazy(() => import("../specific/Search"));
 const NotificationsDialog = lazy(() => import("../specific/Notifications"));
 const NewGroupDialog = lazy(() => import("../specific/NewGroup"));
-const IconBtn = ({ title, icon, onClick }) => {
+const IconBtn = ({ title, icon, onClick, value }) => {
   return (
     <Tooltip title={title}>
       <IconButton color="inherit" size="large" onClick={onClick}>
-        {icon}
+        {value ? (
+          <Badge badgeContent={value} color="error">
+            {icon}
+          </Badge>
+        ) : (
+          icon
+        )}
       </IconButton>
     </Tooltip>
   );
@@ -44,6 +52,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isSearch, isNotification } = useSelector((state) => state.misc);
+  const { notificationCount } = useSelector((state) => state.chat);
 
   const [isNewGroup, setIsNewGroup] = useState(false);
 
@@ -55,7 +64,7 @@ const Header = () => {
   };
   const openNotification = () => {
     dispatch(setIsNotification(true));
-    // TODO: implement navigation to notification page
+    dispatch(resetNotification());
   };
   const naviageToGroup = () => {
     navigate("/groups", { replace: true });
@@ -113,6 +122,7 @@ const Header = () => {
                 title={"Notifications"}
                 icon={<NotificationsIcon />}
                 onClick={openNotification}
+                value={notificationCount}
               />
               <IconBtn
                 title={"Logout"}

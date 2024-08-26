@@ -80,7 +80,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
             <input
               type="file"
               multiple
-              accept="audio/mpeg,audio/wav"
+              accept="audio/mpeg,audio/wav,audio/mp3"
               style={{ display: "none" }}
               onChange={(e) => fileChangeHandler(e, "Audios")}
               ref={audioRef}

@@ -3,7 +3,7 @@ import {
   Send as SendIcon,
 } from "@mui/icons-material";
 import { IconButton, Skeleton, Stack } from "@mui/material";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import FileMenu from "../components/dialogs/FileMenu";
 import AppLayout from "../components/layout/AppLayout";
 import MessageComponent from "../components/shared/MessageComponent";
@@ -16,12 +16,13 @@ import { getSocket } from "../utils/socket";
 import { useInfiniteScrollTop } from "6pp";
 import { useDispatch } from "react-redux";
 import { setIsFileMenu } from "../redux/reducers/misc";
+import { removeNewMessagesAlert } from "../redux/reducers/chat";
 
 const Chat = ({ chatId, user }) => {
   const containerRef = useRef(null);
   const socket = getSocket();
   const dispatch = useDispatch();
-
+  console.log("chat Id chat", chatId);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(1);
@@ -57,9 +58,25 @@ const Chat = ({ chatId, user }) => {
     socket.emit(NEW_MESSAGE, { chatId, members, message });
     setMessage("");
   };
-  const newMessagesHandler = useCallback((data) => {
-    setMessages((prevMessages) => [...prevMessages, data.message]);
-  }, []);
+
+  useEffect(() => {
+    dispatch(removeNewMessagesAlert(chatId));
+    return () => {
+      setMessage("");
+      setMessages([]);
+      setOldMessages([]);
+      setPage(1);
+    };
+  }, [chatId]);
+
+  const newMessagesHandler = useCallback(
+    (data) => {
+      if (data.chatId !== chatId) return;
+      console.log("data", data);
+      setMessages((prevMessages) => [...prevMessages, data.message]);
+    },
+    [chatId]
+  );
 
   const eventhandlers = { [NEW_MESSAGE]: newMessagesHandler };
   useSocketEvents(socket, eventhandlers);
@@ -82,8 +99,8 @@ const Chat = ({ chatId, user }) => {
       >
         {/* Message Render */}
 
-        {allMessages.map((i) => (
-          <MessageComponent key={i._id} message={i} user={user} />
+        {allMessages.map((i, index) => (
+          <MessageComponent key={i._id || index} message={i} user={user} />
         ))}
       </Stack>
 
