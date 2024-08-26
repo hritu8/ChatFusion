@@ -10,7 +10,7 @@ import {
 import { TryCatch } from "../middlewares/error.js";
 import { ErrorHandler } from "../utils/utility.js";
 import { Chat } from "../models/chat.js";
-import { NEW_REQUEST } from "../constants/events.js";
+import { NEW_REQUEST, REFETCH_CHATS } from "../constants/events.js";
 import { getOtherMember } from "../lib/helper.js";
 
 // create a new user and  save it to the database and save token in cookie
@@ -130,24 +130,25 @@ const sendFriendRequest = TryCatch(async (req, res, next) => {
 
 const acceptFriendRequest = TryCatch(async (req, res, next) => {
   const { requestId, accept } = req.body;
-  console.log("request se phele");
+
   const request = await Request.findById(requestId)
     .populate("sender", "name")
     .populate("receiver", "name");
-  
+
   if (!request) return next(new ErrorHandler("Request not found", 404));
   if (request.receiver._id.toString() !== req.user.toString())
     return next(
       new ErrorHandler("You are not authorized to accept this request", 401)
     );
-    console.log("request ke baad", request);
+
   if (!accept) {
     await request.deleteOne();
     return res.status(200).json({
       success: true,
-      message: "Request deleted successfully",
+      message: "Friend Request Rejected",
     });
   }
+
   const members = [request.sender._id, request.receiver._id];
 
   await Promise.all([

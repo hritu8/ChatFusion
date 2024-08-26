@@ -100,9 +100,7 @@ const Chat = ({ chatId, user }) => {
   }, [messages]);
 
   useEffect(() => {
-    if (!chatDetails?.data?.chat) {
-      return navigate("/");
-    }
+    if (chatDetails.isError) return navigate("/");
   }, [chatDetails.data]);
 
   const newMessageListener = useCallback(
@@ -131,9 +129,10 @@ const Chat = ({ chatId, user }) => {
     [chatId]
   );
   const alertListener = useCallback(
-    (content) => {
+    (data) => {
+      if (data.chatId !== chatId) return;
       const messageForAlert = {
-        content,
+        content: data.message,
         sender: {
           _id: "dfsegsnhs4634fbxc",
           name: "Admin",

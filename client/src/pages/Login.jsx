@@ -22,6 +22,7 @@ import { server } from "../constants/config";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const toggleLogin = () => setIsLogin((prev) => !prev);
   const name = useInputValidation("");
   const bio = useInputValidation("");
@@ -34,6 +35,8 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading("Logging In...");
+    setIsLoading(true);
     const config = {
       withCredentials: true,
       headers: { "Content-Type": "application/json" },
@@ -47,15 +50,25 @@ const Login = () => {
         },
         config
       );
-      dispatch(userExits(true));
-      toast.success(data.message);
+      dispatch(userExits(data.user));
+      toast.success(data.message, {
+        id: toastId,
+      });
     } catch (error) {
-      toast.error(error?.response?.data?.message) || "Something went wrong";
+      toast.error(error?.response?.data?.message || "Something went wrong"),
+        {
+          id: toastId,
+        };
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading("Signing In...");
+    setIsLoading(true);
+
     const formData = new FormData();
     formData.append("username", username.value);
     formData.append("password", password.value);
@@ -72,11 +85,18 @@ const Login = () => {
         formData,
         config
       );
-      dispatch(userExits(true));
-      toast.success(data.message);
+      dispatch(userExits(data.user));
+      toast.success(data.message, {
+        id: toastId,
+      });
     } catch (error) {
       console.log("sign up failed", error);
-      toast.error(error?.response?.data?.message) || "Something went wrong";
+      toast.error(error?.response?.data?.message || "Something went wrong"),
+        {
+          id: toastId,
+        };
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -139,13 +159,19 @@ const Login = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
+                  disabled={isLoading}
                 >
-                  Sign In
+                  Login
                 </Button>
                 <Typography textAlign={"center"} m={"1rem"}>
                   Or
                 </Typography>
-                <Button fullWidth onClick={toggleLogin} variant="text">
+                <Button
+                  disabled={isLoading}
+                  fullWidth
+                  onClick={toggleLogin}
+                  variant="text"
+                >
                   Sign Up instead
                 </Button>
               </form>
@@ -254,13 +280,19 @@ const Login = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
+                  disabled={isLoading}
                 >
                   Sign Up
                 </Button>
                 <Typography textAlign={"center"} m={"1rem"}>
                   Or
                 </Typography>
-                <Button fullWidth onClick={toggleLogin} variant="text">
+                <Button
+                  disabled={isLoading}
+                  fullWidth
+                  onClick={toggleLogin}
+                  variant="text"
+                >
                   Login instead
                 </Button>
               </form>
