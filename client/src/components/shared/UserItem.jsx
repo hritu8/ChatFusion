@@ -11,7 +11,7 @@ const UserItem = ({
   styling = {},
 }) => {
   const { name, _id, avatar } = user;
-  console.log("userItem", avatar);
+
   return (
     <ListItem>
       <Stack
@@ -21,7 +21,10 @@ const UserItem = ({
         width={"100%"}
         {...styling}
       >
-        <Avatar src={transformImage(avatar)} />
+        {/* Ensure avatar is a string before passing it to the Avatar component */}
+        <Avatar
+          src={typeof avatar === "string" ? transformImage(avatar) : ""}
+        />
 
         <Typography
           variant="body1"

@@ -89,7 +89,10 @@ const MessageManagement = () => {
         id: i._id,
         sender: {
           name: i.sender.name,
-          avatar: transformImage(i.sender.avatar, 50),
+          avatar:
+            typeof i.sender.avatar === "string"
+              ? transformImage(i.sender.avatar, 50)
+              : i.sender.avatar,
         },
         createdAt: moment(i.createdAt).format("MMMM Do YYYY, h:mm:ss a"),
       }))

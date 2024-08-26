@@ -10,7 +10,7 @@ const AvatarCard = ({ avatar = [], max = 4 }) => {
           {avatar.map((i, index) => (
             <Avatar
               key={Math.random() * 100}
-              src={transformImage(i)}
+              src={typeof i === "string" ? transformImage(i) : i} // Ensure i is a string
               alt={`Avatar ${index}`}
               sx={{
                 width: "3rem",

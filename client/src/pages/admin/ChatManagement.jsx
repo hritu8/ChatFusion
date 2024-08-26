@@ -68,11 +68,18 @@ const ChatManagement = () => {
       dashboardData.chats.map((i) => ({
         ...i,
         id: i._id,
-        avatar: i.avatar.map((i) => transformImage(i, 50)),
-        members: i.members.map((i) => transformImage(i.avatar, 50)),
+        avatar: i.avatar.map((i) =>
+          typeof i === "string" ? transformImage(i, 50) : i
+        ),
+        members: i.members.map((i) =>
+          typeof i.avatar === "string" ? transformImage(i.avatar, 50) : i.avatar
+        ),
         creator: {
           name: i.creator.name,
-          avatar: transformImage(i.creator.avatar, 50),
+          avatar:
+            typeof i.creator.avatar === "string"
+              ? transformImage(i.creator.avatar, 50)
+              : i.creator.avatar,
         },
       }))
     );
