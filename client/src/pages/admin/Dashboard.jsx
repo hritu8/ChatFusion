@@ -1,6 +1,13 @@
 import React from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
-import { Box, Container, Paper, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Paper,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import {
   AdminPanelSettings as AdminPanelSettingsIcon,
   Group as GroupIcon,
@@ -15,7 +22,14 @@ import {
 } from "../../components/styles/StyledComponents";
 import { matBlack } from "../../constants/color";
 import { DoughnutChart, LineChart } from "../../components/specific/Charts";
+import { useFetchData } from "6pp";
+import { server } from "../../constants/config";
+import { LayoutLoader } from "../../components/layout/Loaders";
 const Dashboard = () => {
+  const { loading, data, error } = useFetchData(
+    `${server}/api/v1/admin/stats`,
+    "dashboard-stats"
+  );
   const Appbar = (
     <Paper
       elevation={3}
@@ -53,7 +67,10 @@ const Dashboard = () => {
       <Widget title={"Messages"} value={67} Icon={<MessageIcon />} />
     </Stack>
   );
-  return (
+  console.log("data", data);
+  return loading ? (
+    <LayoutLoader />
+  ) : (
     <AdminLayout>
       <Container component={"main"}>
         {Appbar}

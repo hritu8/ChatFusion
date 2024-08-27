@@ -1,4 +1,5 @@
 export const server = import.meta.env.VITE_SERVER;
 
-// Add loading & Disable the register button
+
+// not found page
 // delete group members

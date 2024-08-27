@@ -30,14 +30,16 @@ const adminLogout = TryCatch(async (req, res, next) => {
   console.log("admin logout");
   return res
     .status(200)
-    .cookie("chattu-admin-token", token, {
+    .cookie("chattu-admin-token", "", {
       ...cookieOption,
       maxAge: 0,
     })
     .json({ success: true, message: "Logged out successfully" });
 });
 const getAdminData = TryCatch(async (req, res, next) => {
-  return res.status(200).json({ admin: true });
+  const token = req.cookies["chattu-admin-token"];
+  if (!token) return res.status(200).json({ admin: false });
+  else return res.status(200).json({ admin: true });
 });
 
 const allUsers = TryCatch(async (req, res) => {

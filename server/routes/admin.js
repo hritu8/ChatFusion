@@ -1,6 +1,7 @@
 import express from "express";
 import {
   adminLogin,
+  adminLogout,
   allChats,
   allMessages,
   allUsers,
@@ -15,7 +16,7 @@ const app = express.Router();
 
 app.get("/", getAdminData);
 app.post("/verify", adminLoginValidator(), validateHandler, adminLogin);
-app.get("/logout", logout);
+app.get("/logout", adminLogout);
 
 // only admin can access these routes
 app.use(adminOnly);

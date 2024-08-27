@@ -65,6 +65,7 @@ const getMyProfile = TryCatch(async (req, res, next) => {
 });
 
 const logout = TryCatch(async (req, res) => {
+  console.log("logout");
   return res
     .status(200)
     .cookie("chattu-token", "", { ...cookieOption, maxAge: 0 })
